@@ -1,0 +1,283 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model tbl_data_pemeriksaans {
+  id                   BigInt    @id @default(autoincrement())
+  pasien_id            BigInt?
+  antrian_id           BigInt?
+  lab_id               BigInt?
+  bidang_tindakan_id   BigInt?
+  parent_id            BigInt?
+  parameter_id         BigInt?
+  paket_id             BigInt?
+  sample_no            Int?
+  data_sample_id       Int?
+  hasil                String?
+  hasil_keterangan     String?
+  validasi_id          BigInt    @default(42)
+  hasil_pemeriksaan_id BigInt?
+  catatan_bawah_hasil  String?   @db.LongText
+  deleted_at           DateTime?
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+  tindakan_id          BigInt?
+}
+
+model tbl_pembayarans {
+  id                   BigInt    @id @default(autoincrement())
+  employee_id          BigInt?
+  pasien_id            BigInt
+  antrian_id           BigInt
+  group_code           String?   @db.LongText
+  total_pembayaran     String    @db.VarChar(255)
+  kembalian            String?   @db.VarChar(255)
+  potongan             String?   @db.VarChar(255)
+  total_hutang         String?   @db.VarChar(255)
+  pembayaran_setor_id  BigInt?
+  jenis_pembayaran_id  BigInt?
+  status_pembayaran_id BigInt?
+  status_setor         Int       @default(0)
+  validasi_setor       Int       @default(0)
+  validasi_batal_bayar Int       @default(0)
+  alasan_batal_bayar   String?   @db.LongText
+  deleted_at           DateTime?
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+  tenggat_pembayaran   DateTime?
+  total_dibayar        String?   @db.VarChar(255)
+}
+
+model set_kode_pos {
+  id                BigInt   @id @default(autoincrement())
+  provinsi_id       BigInt
+  kota_kabupaten_id BigInt
+  kecamatan_id      BigInt
+  kelurahan_id      BigInt
+  kode_pos          Int
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+}
+
+model set_kelurahan {
+  id           BigInt   @id @default(autoincrement())
+  kecamatan set_kecamatan   @relation(fields: [kecamatan_id], references: [id])
+  kecamatan_id BigInt
+  name         String   @db.VarChar(255)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}
+
+model set_kecamatan {
+  id                BigInt   @id @default(autoincrement())
+  set_kelurahan       set_kelurahan[]
+  set_kota set_kota   @relation(fields: [kota_kabupaten_id], references: [id])
+  kota_kabupaten_id BigInt
+  name              String   @db.VarChar(255)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+}
+
+model set_kota {
+  id          BigInt   @id @default(autoincrement())
+  set_kecamatan set_kecamatan[]
+  set_provinsi set_provinsi @relation(fields: [provinsi_id], references: [id])
+  provinsi_id BigInt
+  name        String   @db.VarChar(255)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model set_provinsi {
+  id         BigInt   @id @default(autoincrement())
+  set_kota set_kota[]
+  name       String   @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model set_libraries {
+  id          BigInt   @id @default(autoincrement())
+  set_category set_category @relation(fields: [category_id], references: [id])
+  category_id BigInt
+  name        String   @db.VarChar(255)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model set_category {
+  id         BigInt   @id @default(autoincrement())
+  set_libraries set_libraries[]
+  name       String   @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+// model tbl_antrian_pasien {
+//   id                       BigInt    @id @default(autoincrement())
+//   no_antrian               Int
+//   kode_pemeriksaan         String?   @db.VarChar(255)
+//   pasien_id                BigInt
+//   tipe_pasien_id           BigInt
+//   rujukan_rs_id            BigInt?
+//   instansi_id              BigInt?
+//   dokter_id                BigInt?
+//   umur                     Int?
+//   waktu_kunjungan          DateTime  @db.Date
+//   status_pendaftaran_id    BigInt?   @default(29)
+//   lab_validator_id         BigInt?   @default(8)
+//   validasi_kesmas          Int?      @default(0)
+//   waktu_proses_pendaftaran DateTime?
+//   user_proses_pendaftaran  BigInt?
+//   catatan                  String?   @db.LongText
+//   pembayaran_id            BigInt?
+//   status_pembayaran_id     BigInt?   @default(31)
+//   status_terima_sample_id  BigInt?   @default(32)
+//   sample_pengambil         String?   @db.VarChar(255)
+//   sample_waktu             String?   @db.VarChar(255)
+//   sample_jenis             String?   @db.VarChar(255)
+//   sample_lokasi            String?   @db.VarChar(255)
+//   sample_kondisi           String?   @db.VarChar(255)
+//   sample_wadah             String?   @db.VarChar(255)
+//   waktu_terima_sample      DateTime?
+//   user_terima_sample       BigInt?
+//   waktu_kirim_sample       DateTime?
+//   user_kirim_sample        BigInt?
+//   catatan_sample           String?   @db.LongText
+//   status_pemeriksaan_id    BigInt?   @default(34)
+//   waktu_input_pemeriksaan  DateTime?
+//   user_input_pemeriksaan   BigInt?
+//   catatan_pemeriksaan      String?   @db.LongText
+//   waktu_validasi           DateTime?
+//   user_validasi            BigInt?
+//   catatan_validasi         String?   @db.LongText
+//   turn_around_time         String?   @db.VarChar(255)
+//   deleted_at               DateTime?
+//   created_at               DateTime  @default(now())
+//   updated_at               DateTime  @updatedAt
+// }
+
+model set_jenis_tindakans {
+  id                 BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name               String    @db.VarChar(100)
+  bidang_tindakan_id BigInt    @db.UnsignedBigInt
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+}
+
+model set_tindakans {
+  id                   BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  bidang_tindakan_id   BigInt    @db.UnsignedBigInt
+  jenis_tindakan_id    BigInt?   @db.UnsignedBigInt
+  name                 String    @db.VarChar(255)
+  ada_parameter        String    @default("0") @db.VarChar(255)
+  ada_hasilketerangan  String    @default("0") @db.VarChar(255)
+  satuan_id            BigInt?   @db.UnsignedBigInt
+  tipe_hasil_id        BigInt?   @db.UnsignedBigInt
+  nilai_desimal        String?   @db.VarChar(255)
+  metoda_id            BigInt?   @db.UnsignedBigInt
+  acuan_metode         String?   @db.VarChar(255)
+  sample_id            BigInt?   @db.UnsignedBigInt
+  kategori_id          BigInt    @default(46) @db.UnsignedBigInt
+  harga                String    @default("0") @db.VarChar(255)
+  perkiraan_hari       Int?      @db.TinyInt
+  hasil_pemeriksaan_id BigInt?   @db.UnsignedBigInt
+  satuan_harga_id      BigInt?   @db.UnsignedBigInt
+  created_at           DateTime? @db.Timestamp(0)
+  updated_at           DateTime? @db.Timestamp(0)
+}
+
+model tbl_antrian_pasiens {
+  id                       BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  no_antrian               Int
+  kode_pemeriksaan         String?   @db.VarChar(255)
+  pasien_id                BigInt    @db.UnsignedBigInt
+  tipe_pasien_id           BigInt    @db.UnsignedBigInt
+  rujukan_rs_id            BigInt?   @db.UnsignedBigInt
+  instansi_id              BigInt?   @db.UnsignedBigInt
+  dokter_id                BigInt?   @db.UnsignedBigInt
+  umur                     Int?
+  waktu_kunjungan          DateTime  @db.Date
+  status_pendaftaran_id    BigInt?   @default(29) @db.UnsignedBigInt
+  lab_validator_id         BigInt?   @default(8) @db.UnsignedBigInt
+  validasi_kesmas          Int?      @default(0)
+  waktu_proses_pendaftaran DateTime? @db.DateTime(0)
+  user_proses_pendaftaran  BigInt?   @db.UnsignedBigInt
+  catatan                  String?   @db.LongText
+  pembayaran_id            BigInt?   @db.UnsignedBigInt
+  status_pembayaran_id     BigInt?   @default(31) @db.UnsignedBigInt
+  status_terima_sample_id  BigInt?   @default(32) @db.UnsignedBigInt
+  sample_pengambil         String?   @db.VarChar(255)
+  sample_waktu             String?   @db.VarChar(255)
+  sample_jenis             String?   @db.VarChar(255)
+  sample_lokasi            String?   @db.VarChar(255)
+  sample_kondisi           String?   @db.VarChar(255)
+  sample_wadah             String?   @db.VarChar(255)
+  waktu_terima_sample      DateTime? @db.DateTime(0)
+  user_terima_sample       BigInt?   @db.UnsignedBigInt
+  waktu_kirim_sample       DateTime? @db.DateTime(0)
+  user_kirim_sample        BigInt?   @db.UnsignedBigInt
+  catatan_sample           String?   @db.LongText
+  status_pemeriksaan_id    BigInt?   @default(34) @db.UnsignedBigInt
+  waktu_input_pemeriksaan  DateTime? @db.DateTime(0)
+  user_input_pemeriksaan   BigInt?   @db.UnsignedBigInt
+  catatan_pemeriksaan      String?   @db.LongText
+  waktu_validasi           DateTime? @db.DateTime(0)
+  user_validasi            BigInt?   @db.UnsignedBigInt
+  catatan_validasi         String?   @db.LongText
+  turn_around_time         String?   @db.VarChar(255)
+  deleted_at               DateTime? @db.Timestamp(0)
+  created_at               DateTime? @db.Timestamp(0)
+  updated_at               DateTime? @db.Timestamp(0)
+}
+
+model tbl_user_customers {
+  id                        BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name                      String    @db.VarChar(255)
+  name_petugas              String?   @db.VarChar(255)
+  name_instansi             String    @db.VarChar(255)
+  instansi_mou_id           BigInt?   @db.UnsignedBigInt
+  is_instansi               Boolean
+  email                     String?   @db.VarChar(255)
+  code_verification_email   Int?
+  code_verification_noPhone Int?
+  status_verif_email        Boolean   @default(false)
+  status_verif_noPhone      Boolean   @default(false)
+  kode_pendaftaran          String?   @db.VarChar(255)
+  nik                       String?   @db.VarChar(20)
+  type_account_id           BigInt    @default(53) @db.UnsignedBigInt
+  jenis_kelamin_id          BigInt?   @db.UnsignedBigInt
+  golongan_darah_id         BigInt?   @db.UnsignedBigInt
+  tempat_lahir              String?   @db.VarChar(30)
+  tanggal_lahir             DateTime? @db.Date
+  status_perkawinan_id      BigInt?   @db.UnsignedBigInt
+  pendidikan_id             BigInt?   @db.UnsignedBigInt
+  pekerjaan                 String?   @db.VarChar(255)
+  alamat_domisili           String?   @db.LongText
+  agama                     BigInt?   @db.UnsignedBigInt
+  provinsi_id               BigInt?   @db.UnsignedBigInt
+  kotaKabupaten_id          BigInt?   @db.UnsignedBigInt
+  kecamatan_id              BigInt?   @db.UnsignedBigInt
+  kelurahan_id              BigInt?   @db.UnsignedBigInt
+  kode_pos                  String?   @db.VarChar(7)
+  warga_negara_id           BigInt?   @db.UnsignedBigInt
+  noHP                      String?   @db.VarChar(15)
+  remember_token            String?   @db.VarChar(255)
+  created_at                DateTime? @db.Timestamp(0)
+  updated_at                DateTime? @db.Timestamp(0)
+
+  @@index([golongan_darah_id], map: "tbl_user_customers_golongan_darah_id_foreign")
+  @@index([jenis_kelamin_id], map: "tbl_user_customers_jenis_kelamin_id_foreign")
+  @@index([kecamatan_id], map: "tbl_user_customers_kecamatan_id_foreign")
+  @@index([kelurahan_id], map: "tbl_user_customers_kelurahan_id_foreign")
+  @@index([kotaKabupaten_id], map: "tbl_user_customers_kotakabupaten_id_foreign")
+  @@index([pendidikan_id], map: "tbl_user_customers_pendidikan_id_foreign")
+  @@index([provinsi_id], map: "tbl_user_customers_provinsi_id_foreign")
+  @@index([status_perkawinan_id], map: "tbl_user_customers_status_perkawinan_id_foreign")
+  @@index([warga_negara_id], map: "tbl_user_customers_warga_negara_id_foreign")
+}

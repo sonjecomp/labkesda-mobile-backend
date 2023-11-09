@@ -1,4 +1,9 @@
-@baseUrl = http://localhost:3000
+@baseUrl = https://ringgogalihsadewo.com/project/sil/getKabupaten
 
 ### GET new
-GET {{baseUrl}}
+POST {{baseUrl}}
+
+{
+    "_token": "pG1c6MQan5E3qVENqdkY6QCzmsJsrVwJTGxPj6sM",
+    "id": 1
+}
