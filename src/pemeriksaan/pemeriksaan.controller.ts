@@ -10,8 +10,10 @@ import {
 import { PemeriksaanService } from './pemeriksaan.service';
 import { CreatePemeriksaanDto } from './dto/create-pemeriksaan.dto';
 import { UpdatePemeriksaanDto } from './dto/update-pemeriksaan.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('pemeriksaan')
+@ApiTags('pemeriksaan')
+@Controller()
 export class PemeriksaanController {
   constructor(private readonly pemeriksaanService: PemeriksaanService) {}
 
