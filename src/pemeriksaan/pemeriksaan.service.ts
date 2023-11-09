@@ -4,7 +4,7 @@ import { CreatePemeriksaanDto } from './dto/create-pemeriksaan.dto';
 @Injectable()
 export class PemeriksaanService {
   create(createPemeriksaanDto: CreatePemeriksaanDto) {
-    return 'This action adds a new pemeriksaan';
+    return createPemeriksaanDto;
   }
 
   findAll() {
