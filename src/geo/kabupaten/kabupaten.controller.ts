@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { KabupatenService } from './kabupaten.service';
 import { CreateKabupatenDto } from './dto/create-kabupaten.dto';
-import { UpdateKabupatenDto } from './dto/update-kabupaten.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('geo')
@@ -30,18 +21,5 @@ export class KabupatenController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.kabupatenService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateKabupatenDto: UpdateKabupatenDto,
-  ) {
-    return this.kabupatenService.update(+id, updateKabupatenDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.kabupatenService.remove(+id);
   }
 }

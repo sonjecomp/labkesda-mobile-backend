@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ProvinsiService } from './provinsi.service';
 import { CreateProvinsiDto } from './dto/create-provinsi.dto';
-import { UpdateProvinsiDto } from './dto/update-provinsi.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('geo')
@@ -30,18 +21,5 @@ export class ProvinsiController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.provinsiService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateProvinsiDto: UpdateProvinsiDto,
-  ) {
-    return this.provinsiService.update(+id, updateProvinsiDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.provinsiService.remove(+id);
   }
 }

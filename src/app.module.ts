@@ -3,10 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PemeriksaanModule } from './pemeriksaan/pemeriksaan.module';
 import { RouterModule } from '@nestjs/core';
-import { ProvinsiModule } from './provinsi/provinsi.module';
-import { KabupatenModule } from './kabupaten/kabupaten.module';
-import { KecamatanModule } from './kecamatan/kecamatan.module';
-import { KelurahanModule } from './kelurahan/kelurahan.module';
+import { ProvinsiModule } from './geo/provinsi/provinsi.module';
+import { KabupatenModule } from './geo/kabupaten/kabupaten.module';
+import { KecamatanModule } from './geo/kecamatan/kecamatan.module';
+import { KelurahanModule } from './geo/kelurahan/kelurahan.module';
+import { UserPasienModule } from './user-pasien/user-pasien.module';
 
 @Module({
   imports: [
@@ -18,6 +19,10 @@ import { KelurahanModule } from './kelurahan/kelurahan.module';
           {
             path: 'pemeriksaan',
             module: PemeriksaanModule,
+          },
+          {
+            path: 'user-pasien',
+            module: UserPasienModule,
           },
           {
             path: 'geo',
@@ -47,6 +52,7 @@ import { KelurahanModule } from './kelurahan/kelurahan.module';
     KabupatenModule,
     KecamatanModule,
     KelurahanModule,
+    UserPasienModule,
   ],
   controllers: [AppController],
   providers: [AppService],

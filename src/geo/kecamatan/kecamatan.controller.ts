@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { KecamatanService } from './kecamatan.service';
 import { CreateKecamatanDto } from './dto/create-kecamatan.dto';
-import { UpdateKecamatanDto } from './dto/update-kecamatan.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('geo')
@@ -30,18 +21,5 @@ export class KecamatanController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.kecamatanService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateKecamatanDto: UpdateKecamatanDto,
-  ) {
-    return this.kecamatanService.update(+id, updateKecamatanDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.kecamatanService.remove(+id);
   }
 }
