@@ -26,6 +26,10 @@ import { AntrianPasienModule } from './antrian-pasien/antrian-pasien.module';
             module: UserPasienModule,
           },
           {
+            path: 'antrian-pasien',
+            module: AntrianPasienModule,
+          },
+          {
             path: 'geo',
             children: [
               {

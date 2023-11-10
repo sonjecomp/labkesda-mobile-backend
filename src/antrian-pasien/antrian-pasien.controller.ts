@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AntrianPasienService } from './antrian-pasien.service';
 import { CreateAntrianPasienDto } from './dto/create-antrian-pasien.dto';
 import { UpdateAntrianPasienDto } from './dto/update-antrian-pasien.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('antrian-pasien')
+@ApiTags('antrian-pasien')
+@Controller()
 export class AntrianPasienController {
   constructor(private readonly antrianPasienService: AntrianPasienService) {}
 
@@ -23,7 +33,10 @@ export class AntrianPasienController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAntrianPasienDto: UpdateAntrianPasienDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateAntrianPasienDto: UpdateAntrianPasienDto,
+  ) {
     return this.antrianPasienService.update(+id, updateAntrianPasienDto);
   }
 

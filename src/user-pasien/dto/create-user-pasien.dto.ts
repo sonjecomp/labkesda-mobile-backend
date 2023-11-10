@@ -2,41 +2,59 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserPasienDto {
   @ApiProperty()
-  nama: string;
+  name: string;
+
   @ApiProperty()
-  tempatLahir: string;
+  tempat_lahir: string;
+
   @ApiProperty()
-  tanggalLahir: Date;
+  tanggal_lahir: Date;
+
   @ApiProperty()
   nik: string;
+
   @ApiProperty()
-  agamaId: number;
+  agama: bigint;
+
   @ApiProperty()
-  alamat: string;
+  alamat_domisili: string;
+
   @ApiProperty()
-  jenisKelaminId: number;
+  jenis_kelamin_id: bigint;
+
   @ApiProperty()
-  golonganDarahId: number;
+  golongan_darah_id: bigint;
+
   @ApiProperty()
-  nomorTelepon: string;
+  noHP: string;
+
   @ApiProperty()
-  pendidikanId: number;
+  pendidikan_id: bigint;
+
   @ApiProperty()
   pekerjaan: string;
+
   @ApiProperty()
-  provinsiId: number;
+  provinsi_id: bigint;
+
   @ApiProperty()
-  kabupatenId: number;
+  kotaKabupaten_id: bigint;
+
   @ApiProperty()
-  kecamatanId: number;
+  kecamatan_id: bigint;
+
   @ApiProperty()
-  kelurahanId: number;
+  kelurahan_id: bigint;
+
   @ApiProperty()
-  kodePos: string;
+  kode_pos: string;
+
   @ApiProperty()
-  statusPerkawinanId: number;
+  status_perkawinan_id: bigint;
+
   @ApiProperty()
-  kewarganegaraanId: number;
+  warga_negara_id: bigint;
+
   @ApiProperty()
   email: string;
 }
