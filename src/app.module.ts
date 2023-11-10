@@ -8,10 +8,11 @@ import { KabupatenModule } from './geo/kabupaten/kabupaten.module';
 import { KecamatanModule } from './geo/kecamatan/kecamatan.module';
 import { KelurahanModule } from './geo/kelurahan/kelurahan.module';
 import { UserPasienModule } from './user-pasien/user-pasien.module';
+import { PrismaService } from './prisma/prisma.service';
+import { AntrianPasienModule } from './antrian-pasien/antrian-pasien.module';
 
 @Module({
   imports: [
-    PemeriksaanModule,
     RouterModule.register([
       {
         path: 'api/v1',
@@ -48,13 +49,15 @@ import { UserPasienModule } from './user-pasien/user-pasien.module';
         ],
       },
     ]),
+    PemeriksaanModule,
     ProvinsiModule,
     KabupatenModule,
     KecamatanModule,
     KelurahanModule,
     UserPasienModule,
+    AntrianPasienModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}

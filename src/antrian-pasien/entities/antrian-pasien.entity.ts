@@ -1,0 +1,45 @@
+import { tbl_antrian_pasiens } from '@prisma/client';
+
+export class AntrianPasien implements tbl_antrian_pasiens {
+  id: bigint;
+  no_antrian: number;
+  kode_pemeriksaan: string;
+  pasien_id: bigint;
+  tipe_pasien_id: bigint;
+  rujukan_rs_id: bigint;
+  instansi_id: bigint;
+  dokter_id: bigint;
+  umur: number;
+  waktu_kunjungan: Date;
+  status_pendaftaran_id: bigint;
+  lab_validator_id: bigint;
+  validasi_kesmas: number;
+  waktu_proses_pendaftaran: Date;
+  user_proses_pendaftaran: bigint;
+  catatan: string;
+  pembayaran_id: bigint;
+  status_pembayaran_id: bigint;
+  status_terima_sample_id: bigint;
+  sample_pengambil: string;
+  sample_waktu: string;
+  sample_jenis: string;
+  sample_lokasi: string;
+  sample_kondisi: string;
+  sample_wadah: string;
+  waktu_terima_sample: Date;
+  user_terima_sample: bigint;
+  waktu_kirim_sample: Date;
+  user_kirim_sample: bigint;
+  catatan_sample: string;
+  status_pemeriksaan_id: bigint;
+  waktu_input_pemeriksaan: Date;
+  user_input_pemeriksaan: bigint;
+  catatan_pemeriksaan: string;
+  waktu_validasi: Date;
+  user_validasi: bigint;
+  catatan_validasi: string;
+  turn_around_time: string;
+  deleted_at: Date;
+  created_at: Date;
+  updated_at: Date;
+}
