@@ -1,7 +1,7 @@
-@baseUrl = https://ringgogalihsadewo.com/project/sil/getKabupaten
+@baseUrl = https://ringgogalihsadewo.com/project/sil
 
 ### GET new
-POST {{baseUrl}}
+GET {{baseUrl}}
 
 {
     "_token": "pG1c6MQan5E3qVENqdkY6QCzmsJsrVwJTGxPj6sM",

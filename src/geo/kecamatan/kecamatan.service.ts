@@ -1,26 +1,65 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateKecamatanDto } from './dto/create-kecamatan.dto';
-import { UpdateKecamatanDto } from './dto/update-kecamatan.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Kecamatan } from './entities/kecamatan.entity';
 
 @Injectable()
 export class KecamatanService {
-  create(createKecamatanDto: CreateKecamatanDto) {
-    return 'This action adds a new kecamatan';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createKecamatanDto: CreateKecamatanDto): Promise<Kecamatan> {
+    try {
+      const result = await this.prisma.set_kecamatan.create({
+        data: createKecamatanDto,
+      });
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findAll() {
-    return `This action returns all kecamatan`;
+  async findAll(id: number): Promise<Kecamatan[]> {
+    try {
+      if (!id) {
+        throw new NotFoundException('Kabupaten id tidak boleh kosong');
+      }
+
+      const result = await this.prisma.set_kecamatan.findMany({
+        where: {
+          kota_kabupaten_id: BigInt(id),
+        },
+      });
+
+      if (!result || result.length === 0) {
+        throw new NotFoundException(
+          `Kecamatan dengan kabupaten id ${id} tidak ditemukan`,
+        );
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} kecamatan`;
-  }
+  async findOne(id: number): Promise<Kecamatan> {
+    try {
+      const result = await this.prisma.set_kecamatan.findUnique({
+        where: {
+          id: BigInt(id),
+        },
+      });
 
-  update(id: number, updateKecamatanDto: UpdateKecamatanDto) {
-    return `This action updates a #${id} kecamatan`;
-  }
+      if (!result) {
+        throw new NotFoundException(
+          `Kecamatan dengan id ${id} tidak ditemukan`,
+        );
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} kecamatan`;
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 }

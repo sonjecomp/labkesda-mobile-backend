@@ -9,17 +9,17 @@ export class ProvinsiController {
   constructor(private readonly provinsiService: ProvinsiService) {}
 
   @Post()
-  create(@Body() createProvinsiDto: CreateProvinsiDto) {
-    return this.provinsiService.create(createProvinsiDto);
+  async create(@Body() createProvinsiDto: CreateProvinsiDto) {
+    return await this.provinsiService.create(createProvinsiDto);
   }
 
   @Get()
-  findAll() {
-    return this.provinsiService.findAll();
+  async findAll() {
+    return await this.provinsiService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.provinsiService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.provinsiService.findOne(+id);
   }
 }

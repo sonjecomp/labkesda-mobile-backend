@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProvinsiDto } from './dto/create-provinsi.dto';
-import { UpdateProvinsiDto } from './dto/update-provinsi.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Provinsi } from './entities/provinsi.entity';
+
+// types/common.d.ts
+declare global {
+  interface BigInt {
+    toJSON(): string;
+  }
+}
+
+BigInt.prototype.toJSON = function () {
+  return String(this);
+};
 
 @Injectable()
 export class ProvinsiService {
-  create(createProvinsiDto: CreateProvinsiDto) {
-    return 'This action adds a new provinsi';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createProvinsiDto: CreateProvinsiDto): Promise<Provinsi> {
+    try {
+      const result = await this.prisma.set_provinsi.create({
+        data: createProvinsiDto,
+      });
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findAll() {
-    return `This action returns all provinsi`;
+  async findAll(): Promise<Provinsi[]> {
+    try {
+      const result = await this.prisma.set_provinsi.findMany();
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} provinsi`;
-  }
+  async findOne(id: number): Promise<Provinsi> {
+    try {
+      const result = await this.prisma.set_provinsi.findUnique({
+        where: {
+          id: BigInt(id),
+        },
+      });
 
-  update(id: number, updateProvinsiDto: UpdateProvinsiDto) {
-    return `This action updates a #${id} provinsi`;
-  }
+      if (!result) {
+        throw new NotFoundException(`Provinsi dengan id ${id} tidak ditemukan`);
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} provinsi`;
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 }

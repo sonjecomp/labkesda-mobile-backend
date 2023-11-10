@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { KelurahanService } from './kelurahan.service';
 import { CreateKelurahanDto } from './dto/create-kelurahan.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -9,13 +9,13 @@ export class KelurahanController {
   constructor(private readonly kelurahanService: KelurahanService) {}
 
   @Post()
-  create(@Body() createKelurahanDto: CreateKelurahanDto) {
-    return this.kelurahanService.create(createKelurahanDto);
+  async create(@Body() createKelurahanDto: CreateKelurahanDto) {
+    return await this.kelurahanService.create(createKelurahanDto);
   }
 
   @Get()
-  findAll() {
-    return this.kelurahanService.findAll();
+  findAll(@Query('kecamatan_id') id: string) {
+    return this.kelurahanService.findAll(+id);
   }
 
   @Get(':id')

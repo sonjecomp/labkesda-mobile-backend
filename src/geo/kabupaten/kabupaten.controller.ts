@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { KabupatenService } from './kabupaten.service';
 import { CreateKabupatenDto } from './dto/create-kabupaten.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -9,17 +9,17 @@ export class KabupatenController {
   constructor(private readonly kabupatenService: KabupatenService) {}
 
   @Post()
-  create(@Body() createKabupatenDto: CreateKabupatenDto) {
-    return this.kabupatenService.create(createKabupatenDto);
+  async create(@Body() createKabupatenDto: CreateKabupatenDto) {
+    return await this.kabupatenService.create(createKabupatenDto);
   }
 
   @Get()
-  findAll() {
-    return this.kabupatenService.findAll();
+  async findAll(@Query('provinsi_id') id: string) {
+    return await this.kabupatenService.findAll(+id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.kabupatenService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.kabupatenService.findOne(+id);
   }
 }
