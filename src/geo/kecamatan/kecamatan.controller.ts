@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { KecamatanService } from './kecamatan.service';
 import { CreateKecamatanDto } from './dto/create-kecamatan.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('geo')
 @Controller()
 export class KecamatanController {
   constructor(private readonly kecamatanService: KecamatanService) {}
 
+  @ApiExcludeEndpoint()
   @Post()
   async create(@Body() createKecamatanDto: CreateKecamatanDto) {
     return await this.kecamatanService.create(createKecamatanDto);
@@ -18,6 +19,7 @@ export class KecamatanController {
     return await this.kecamatanService.findAll(+id);
   }
 
+  @ApiExcludeEndpoint()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.kecamatanService.findOne(+id);
