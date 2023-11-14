@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateKelurahanDto } from './dto/create-kelurahan.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Kelurahan } from './entities/kelurahan.entity';
@@ -20,17 +20,24 @@ export class KelurahanService {
   async findAll(id: number): Promise<Kelurahan[]> {
     try {
       if (!id) {
-        throw new Error('Kecamatan id tidak boleh kosong');
+        throw new NotFoundException('Kecamatan id tidak boleh kosong');
       }
 
-      const result = await this.prisma.set_kelurahan.findMany({
+      const result = (await this.prisma.set_kelurahan.findMany({
         where: {
           kecamatan_id: BigInt(id),
         },
-      });
+        select: {
+          id: true,
+          kecamatan_id: true,
+          name: true,
+        },
+      })) as Kelurahan[];
 
       if (!result || result.length === 0) {
-        throw new Error(`Kelurahan dengan kecamatan id ${id} tidak ditemukan`);
+        throw new NotFoundException(
+          `Kelurahan dengan kecamatan id ${id} tidak ditemukan`,
+        );
       }
 
       return result;
