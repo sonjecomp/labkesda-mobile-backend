@@ -25,11 +25,16 @@ export class KecamatanService {
         throw new NotFoundException('Kabupaten id tidak boleh kosong');
       }
 
-      const result = await this.prisma.set_kecamatan.findMany({
+      const result = (await this.prisma.set_kecamatan.findMany({
         where: {
           kota_kabupaten_id: BigInt(id),
         },
-      });
+        select: {
+          id: true,
+          kota_kabupaten_id: true,
+          name: true,
+        },
+      })) as Kecamatan[];
 
       if (!result || result.length === 0) {
         throw new NotFoundException(

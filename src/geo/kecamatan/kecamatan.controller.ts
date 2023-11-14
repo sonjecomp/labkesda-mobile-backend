@@ -21,7 +21,7 @@ export class KecamatanController {
 
   @ApiExcludeEndpoint()
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.kecamatanService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.kecamatanService.findOne(id);
   }
 }

@@ -32,7 +32,12 @@ export class ProvinsiService {
 
   async findAll(): Promise<Provinsi[]> {
     try {
-      const result = await this.prisma.set_provinsi.findMany();
+      const result = (await this.prisma.set_provinsi.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+      })) as Provinsi[];
 
       return result;
     } catch (error) {

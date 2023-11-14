@@ -1,27 +1,20 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { AntrianPasienService } from './antrian-pasien.service';
 import { CreateAntrianPasienDto } from './dto/create-antrian-pasien.dto';
-import { UpdateAntrianPasienDto } from './dto/update-antrian-pasien.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('antrian-pasien')
 @Controller()
 export class AntrianPasienController {
   constructor(private readonly antrianPasienService: AntrianPasienService) {}
 
+  @ApiExcludeEndpoint()
   @Post()
   create(@Body() createAntrianPasienDto: CreateAntrianPasienDto) {
     return this.antrianPasienService.create(createAntrianPasienDto);
   }
 
+  @ApiExcludeEndpoint()
   @Get()
   findAll() {
     return this.antrianPasienService.findAll();
@@ -30,18 +23,5 @@ export class AntrianPasienController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.antrianPasienService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateAntrianPasienDto: UpdateAntrianPasienDto,
-  ) {
-    return this.antrianPasienService.update(+id, updateAntrianPasienDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.antrianPasienService.remove(+id);
   }
 }
