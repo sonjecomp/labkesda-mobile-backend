@@ -13,8 +13,13 @@ export class UserPasienController {
     return this.userPasienService.create(createUserPasienDto);
   }
 
+  @Get()
+  findAll() {
+    return this.userPasienService.findAll();
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userPasienService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.userPasienService.findOne(id);
   }
 }

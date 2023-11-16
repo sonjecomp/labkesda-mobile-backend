@@ -43,7 +43,7 @@ export class CategoryService {
         },
       })) as Library[];
 
-      if (!result) {
+      if (!result || result.length === 0) {
         throw new NotFoundException(`Category with id ${id} not found`);
       }
 

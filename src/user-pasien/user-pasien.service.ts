@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserPasienDto } from './dto/create-user-pasien.dto';
-import { UpdateUserPasienDto } from './dto/update-user-pasien.dto';
+import { PrismaClient } from '@prisma/client';
+import { UserPasien } from './entities/user-pasien.entity';
 
 @Injectable()
 export class UserPasienService {
+  constructor(private readonly prisma: PrismaClient) {}
   create(createUserPasienDto: CreateUserPasienDto) {
     return 'This action adds a new userPasien';
   }
 
-  findAll() {
-    return `This action returns all userPasien`;
+  async findAll(): Promise<UserPasien[]> {
+    try {
+      const result = (await this.prisma.tbl_user_customers.findMany(
+        {},
+      )) as UserPasien[];
+
+      if (!result || result.length === 0) {
+        throw new NotFoundException('User Pasien not found');
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} userPasien`;
-  }
+  async findOne(id: number): Promise<UserPasien> {
+    try {
+      const result = await this.prisma.tbl_user_customers.findUnique({
+        where: {
+          id: BigInt(id),
+        },
+      });
 
-  update(id: number, updateUserPasienDto: UpdateUserPasienDto) {
-    return `This action updates a #${id} userPasien`;
-  }
+      if (!result) {
+        throw new NotFoundException(`User Pasien with id ${id} not found`);
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} userPasien`;
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 }
