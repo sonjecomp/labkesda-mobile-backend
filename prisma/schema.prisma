@@ -65,102 +65,49 @@ model set_kode_pos {
 }
 
 model set_kelurahan {
-  id           BigInt   @id @default(autoincrement())
-  kecamatan set_kecamatan   @relation(fields: [kecamatan_id], references: [id])
+  id           BigInt        @id @default(autoincrement())
   kecamatan_id BigInt
-  name         String   @db.VarChar(255)
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  name         String        @db.VarChar(255)
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+  kecamatan    set_kecamatan @relation(fields: [kecamatan_id], references: [id])
+
+  @@index([kecamatan_id], map: "set_kelurahan_kecamatan_id_fkey")
 }
 
 model set_kecamatan {
-  id                BigInt   @id @default(autoincrement())
-  set_kelurahan       set_kelurahan[]
-  set_kota set_kota   @relation(fields: [kota_kabupaten_id], references: [id])
+  id                BigInt          @id @default(autoincrement())
   kota_kabupaten_id BigInt
-  name              String   @db.VarChar(255)
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  name              String          @db.VarChar(255)
+  created_at        DateTime        @default(now())
+  updated_at        DateTime        @updatedAt
+  set_kota          set_kota        @relation(fields: [kota_kabupaten_id], references: [id])
+  set_kelurahan     set_kelurahan[]
+
+  @@index([kota_kabupaten_id], map: "set_kecamatan_kota_kabupaten_id_fkey")
 }
 
 model set_kota {
-  id          BigInt   @id @default(autoincrement())
+  id            BigInt          @id @default(autoincrement())
+  provinsi_id   BigInt
+  name          String          @db.VarChar(255)
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
   set_kecamatan set_kecamatan[]
-  set_provinsi set_provinsi @relation(fields: [provinsi_id], references: [id])
-  provinsi_id BigInt
-  name        String   @db.VarChar(255)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  set_provinsi  set_provinsi    @relation(fields: [provinsi_id], references: [id])
+
+  @@index([provinsi_id], map: "set_kota_provinsi_id_fkey")
 }
 
 model set_provinsi {
-  id         BigInt   @id @default(autoincrement())
-  set_kota set_kota[]
-  name       String   @db.VarChar(255)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id         BigInt     @id @default(autoincrement())
+  name       String     @db.VarChar(255)
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  set_kota   set_kota[]
 }
 
-model set_libraries {
-  id          BigInt   @id @default(autoincrement())
-  set_category set_category @relation(fields: [category_id], references: [id])
-  category_id BigInt
-  name        String   @db.VarChar(255)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-}
 
-model set_category {
-  id         BigInt   @id @default(autoincrement())
-  set_libraries set_libraries[]
-  name       String   @db.VarChar(255)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-// model tbl_antrian_pasien {
-//   id                       BigInt    @id @default(autoincrement())
-//   no_antrian               Int
-//   kode_pemeriksaan         String?   @db.VarChar(255)
-//   pasien_id                BigInt
-//   tipe_pasien_id           BigInt
-//   rujukan_rs_id            BigInt?
-//   instansi_id              BigInt?
-//   dokter_id                BigInt?
-//   umur                     Int?
-//   waktu_kunjungan          DateTime  @db.Date
-//   status_pendaftaran_id    BigInt?   @default(29)
-//   lab_validator_id         BigInt?   @default(8)
-//   validasi_kesmas          Int?      @default(0)
-//   waktu_proses_pendaftaran DateTime?
-//   user_proses_pendaftaran  BigInt?
-//   catatan                  String?   @db.LongText
-//   pembayaran_id            BigInt?
-//   status_pembayaran_id     BigInt?   @default(31)
-//   status_terima_sample_id  BigInt?   @default(32)
-//   sample_pengambil         String?   @db.VarChar(255)
-//   sample_waktu             String?   @db.VarChar(255)
-//   sample_jenis             String?   @db.VarChar(255)
-//   sample_lokasi            String?   @db.VarChar(255)
-//   sample_kondisi           String?   @db.VarChar(255)
-//   sample_wadah             String?   @db.VarChar(255)
-//   waktu_terima_sample      DateTime?
-//   user_terima_sample       BigInt?
-//   waktu_kirim_sample       DateTime?
-//   user_kirim_sample        BigInt?
-//   catatan_sample           String?   @db.LongText
-//   status_pemeriksaan_id    BigInt?   @default(34)
-//   waktu_input_pemeriksaan  DateTime?
-//   user_input_pemeriksaan   BigInt?
-//   catatan_pemeriksaan      String?   @db.LongText
-//   waktu_validasi           DateTime?
-//   user_validasi            BigInt?
-//   catatan_validasi         String?   @db.LongText
-//   turn_around_time         String?   @db.VarChar(255)
-//   deleted_at               DateTime?
-//   created_at               DateTime  @default(now())
-//   updated_at               DateTime  @updatedAt
-// }
 
 model set_jenis_tindakans {
   id                 BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
@@ -280,4 +227,21 @@ model tbl_user_customers {
   @@index([provinsi_id], map: "tbl_user_customers_provinsi_id_foreign")
   @@index([status_perkawinan_id], map: "tbl_user_customers_status_perkawinan_id_foreign")
   @@index([warga_negara_id], map: "tbl_user_customers_warga_negara_id_foreign")
+}
+
+model set_libraries {
+  id          BigInt   @id @default(autoincrement())
+  category_id BigInt
+  name        String   @db.VarChar(255)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  set_categories set_categories @relation(fields: [category_id], references: [id])
+}
+
+model set_categories {
+  id         BigInt    @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  set_libraries set_libraries[]
 }

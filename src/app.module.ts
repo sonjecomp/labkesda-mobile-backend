@@ -10,6 +10,7 @@ import { KelurahanModule } from './geo/kelurahan/kelurahan.module';
 import { UserPasienModule } from './user-pasien/user-pasien.module';
 import { PrismaService } from './prisma/prisma.service';
 import { AntrianPasienModule } from './antrian-pasien/antrian-pasien.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -28,6 +29,10 @@ import { AntrianPasienModule } from './antrian-pasien/antrian-pasien.module';
           {
             path: 'antrian-pasien',
             module: AntrianPasienModule,
+          },
+          {
+            path: 'category',
+            module: CategoryModule,
           },
           {
             path: 'geo',
@@ -60,6 +65,7 @@ import { AntrianPasienModule } from './antrian-pasien/antrian-pasien.module';
     KelurahanModule,
     UserPasienModule,
     AntrianPasienModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
