@@ -14,6 +14,7 @@ export class CategoryService {
           name: true,
           set_libraries: {
             select: {
+              id: true,
               name: true,
             },
           },
@@ -39,7 +40,6 @@ export class CategoryService {
         select: {
           id: true,
           name: true,
-          category_id: true,
         },
       })) as Library[];
 
