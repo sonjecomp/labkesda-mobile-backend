@@ -3,6 +3,7 @@ import { CreatePemeriksaanDto } from './dto/create-pemeriksaan.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserPasienService } from 'src/user-pasien/user-pasien.service';
 import { AntrianPasienService } from 'src/antrian-pasien/antrian-pasien.service';
+import { CreatePemeriksaanPasienLamaDto } from './dto/create-pemeriksaan-pasien-lama.dto';
 
 @Injectable()
 export class PemeriksaanService {
@@ -37,6 +38,33 @@ export class PemeriksaanService {
         user,
         pemeriksaan,
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createPasienLama(
+    createPemeriksaanPasienLamaDto: CreatePemeriksaanPasienLamaDto,
+  ) {
+    try {
+      // create pemeriksaan
+      const foundUser = await this.prisma.tbl_user_customers.findFirst({
+        where: {
+          kode_pendaftaran: createPemeriksaanPasienLamaDto.kode_pendaftaran,
+        },
+      });
+
+      if (!foundUser || !foundUser.id) {
+        throw new NotFoundException('Kode pendaftaran tidak ditemukan');
+      }
+
+      const foundPemeriksaan =
+        await this.antriannPasienService.getAntrianPasienByKodePemeriksaan(
+          foundUser.id,
+        );
+
+      // TODO: lanjut bikin pemeriksaan pasien lama
+      return foundPemeriksaan;
     } catch (error) {
       throw error;
     }

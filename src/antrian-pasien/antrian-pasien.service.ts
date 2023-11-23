@@ -24,6 +24,24 @@ export class AntrianPasienService {
     }
   }
 
+  async getAntrianPasienByKodePemeriksaan(userId: bigint) {
+    try {
+      const result = await this.prisma.tbl_antrian_pasiens.findFirst({
+        where: {
+          pasien_id: userId,
+        },
+      });
+
+      if (!result) {
+        throw new NotFoundException();
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getPemeriksaanByUserId(userId: bigint) {
     try {
       const result = await this.prisma.tbl_antrian_pasiens.findMany({
