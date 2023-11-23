@@ -1,46 +1,71 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserPasienDto } from './dto/create-user-pasien.dto';
 import { PrismaClient } from '@prisma/client';
-import { UserPasien } from './entities/user-pasien.entity';
 
 @Injectable()
 export class UserPasienService {
   constructor(private readonly prisma: PrismaClient) {}
-  create(createUserPasienDto: CreateUserPasienDto) {
-    return 'This action adds a new userPasien';
-  }
 
-  async findAll(): Promise<UserPasien[]> {
+  async createPasienBaru(createUserPasienDto: CreateUserPasienDto) {
     try {
-      const result = (await this.prisma.tbl_user_customers.findMany(
-        {},
-      )) as UserPasien[];
-
-      if (!result || result.length === 0) {
-        throw new NotFoundException('User Pasien not found');
-      }
-
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findOne(id: number): Promise<UserPasien> {
-    try {
-      const result = await this.prisma.tbl_user_customers.findUnique({
-        where: {
-          id: BigInt(id),
+      const result = await this.prisma.tbl_user_customers.create({
+        data: {
+          ...createUserPasienDto,
+          kode_pendaftaran: await this.generateKodePendaftaran(),
+          name_instansi: '',
+          is_instansi: false,
         },
       });
 
       if (!result) {
-        throw new NotFoundException(`User Pasien with id ${id} not found`);
+        throw new Error('Failed to create user pasien');
       }
 
       return result;
     } catch (error) {
       throw error;
     }
+  }
+
+  // function to generate kode pendaftaran
+  async generateKodePendaftaran(): Promise<string> {
+    // get last kode pendaftaran
+    const lastKodePendaftaran = await this.prisma.tbl_user_customers.findFirst({
+      orderBy: {
+        kode_pendaftaran: 'desc',
+      },
+      select: {
+        kode_pendaftaran: true,
+      },
+    });
+
+    // check if last kode pendaftaran is null
+    if (!lastKodePendaftaran || !lastKodePendaftaran.kode_pendaftaran) {
+      return this.getYear() + this.getMonth() + '0001';
+    }
+
+    // convert to number
+    const lastKodePendaftaranNumber = parseInt(
+      lastKodePendaftaran.kode_pendaftaran.slice(4),
+    );
+
+    // increment last kode pendaftaran number
+    const newKodePendaftaranNumber = lastKodePendaftaranNumber + 1;
+
+    // return new kode pendaftaran
+    return (
+      lastKodePendaftaran.kode_pendaftaran.slice(0, 4) +
+      newKodePendaftaranNumber
+    );
+  }
+
+  getYear(): string {
+    const now = new Date();
+    return now.getFullYear().toString().slice(2);
+  }
+
+  getMonth(): string {
+    const now = new Date();
+    return (now.getMonth() + 1).toString().padStart(2, '0');
   }
 }

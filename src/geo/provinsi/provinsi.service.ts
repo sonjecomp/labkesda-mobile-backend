@@ -3,17 +3,6 @@ import { CreateProvinsiDto } from './dto/create-provinsi.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Provinsi } from './entities/provinsi.entity';
 
-// types/common.d.ts
-declare global {
-  interface BigInt {
-    toJSON(): string;
-  }
-}
-
-BigInt.prototype.toJSON = function () {
-  return String(this);
-};
-
 @Injectable()
 export class ProvinsiService {
   constructor(private prisma: PrismaService) {}

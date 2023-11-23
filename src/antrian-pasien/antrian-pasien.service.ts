@@ -1,26 +1,62 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAntrianPasienDto } from './dto/create-antrian-pasien.dto';
-import { UpdateAntrianPasienDto } from './dto/update-antrian-pasien.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AntrianPasienService {
-  create(createAntrianPasienDto: CreateAntrianPasienDto) {
-    return 'This action adds a new antrianPasien';
+  constructor(readonly prisma: PrismaService) {}
+
+  async createAntrianPasien(
+    createAntrianPasienDto: CreateAntrianPasienDto,
+    pasien_id: bigint,
+  ) {
+    try {
+      return await this.prisma.tbl_antrian_pasiens.create({
+        data: {
+          ...createAntrianPasienDto,
+          no_antrian: await this.generateNoAntrian(),
+          pasien_id: pasien_id,
+          tipe_pasien_id: 1,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findAll() {
-    return `This action returns all antrianPasien`;
+  async getPemeriksaanByUserId(userId: bigint) {
+    try {
+      const result = await this.prisma.tbl_antrian_pasiens.findMany({
+        where: {
+          pasien_id: userId,
+        },
+      });
+
+      if (!result || result.length === 0) {
+        throw new NotFoundException();
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} antrianPasien`;
-  }
+  async generateNoAntrian() {
+    try {
+      const result = await this.prisma.tbl_antrian_pasiens.findFirst({
+        orderBy: {
+          no_antrian: 'desc',
+        },
+      });
 
-  update(id: number, updateAntrianPasienDto: UpdateAntrianPasienDto) {
-    return `This action updates a #${id} antrianPasien`;
-  }
+      if (!result) {
+        return 1;
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} antrianPasien`;
+      return result.no_antrian + 1;
+    } catch (error) {
+      throw error;
+    }
   }
 }

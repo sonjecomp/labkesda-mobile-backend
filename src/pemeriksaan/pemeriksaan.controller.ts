@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { PemeriksaanService } from './pemeriksaan.service';
 import { CreatePemeriksaanDto } from './dto/create-pemeriksaan.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -8,18 +8,28 @@ import { ApiTags } from '@nestjs/swagger';
 export class PemeriksaanController {
   constructor(private readonly pemeriksaanService: PemeriksaanService) {}
 
-  @Post()
-  create(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
-    return this.pemeriksaanService.create(createPemeriksaanDto);
+  @Post('create-pemeriksaan-pasien-baru')
+  createPasienBaru(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
+    return this.pemeriksaanService.createPasienBaru(createPemeriksaanDto);
   }
 
-  @Get('kode-pendaftaran')
-  getLatestKodePendaftaran() {
-    return this.pemeriksaanService.generateKodePendaftaran();
-  }
+  // @Post('create-pemeriksaan-pasien-lama')
+  // createPasienLama(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
+  //   return this.pemeriksaanService.create(createPemeriksaanDto);
+  // }
 
-  @Get('kode-pemeriksaan')
-  getLatestKodePemeriksaan() {
-    return this.pemeriksaanService.generateKodePemeriksaan(true);
+  // @Post('create-pemeriksaan-instansi-baru')
+  // createInstansiBaru(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
+  //   return this.pemeriksaanService.create(createPemeriksaanDto);
+  // }
+
+  // @Post('create-pemeriksaan-instansi-lama')
+  // createInstansiLama(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
+  //   return this.pemeriksaanService.create(createPemeriksaanDto);
+  // }
+
+  @Get('riwayat-pemeriksaan/:kodePendaftaran')
+  getLatestKodePendaftaran(@Param('kodePendaftaran') kodePendaftaran: string) {
+    return this.pemeriksaanService.getRiwayatPemeriksaan(kodePendaftaran);
   }
 }

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AntrianPasienService } from './antrian-pasien.service';
-import { AntrianPasienController } from './antrian-pasien.controller';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
-  controllers: [AntrianPasienController],
-  providers: [AntrianPasienService],
+  providers: [AntrianPasienService, PrismaService],
+  exports: [AntrianPasienService],
 })
 export class AntrianPasienModule {}

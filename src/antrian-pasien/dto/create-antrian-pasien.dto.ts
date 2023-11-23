@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAntrianPasienDto {
-  @ApiProperty()
+  @ApiProperty({
+    required: false,
+  })
   dokter_id: bigint;
 
   @ApiProperty()
@@ -22,7 +24,9 @@ export class CreateAntrianPasienDto {
   @ApiProperty()
   sample_kondisi: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    required: false,
+  })
   instansi_id: bigint;
 
   @ApiProperty()
