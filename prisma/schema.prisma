@@ -107,8 +107,6 @@ model set_provinsi {
   set_kota   set_kota[]
 }
 
-
-
 model set_jenis_tindakans {
   id                 BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
   name               String    @db.VarChar(100)
@@ -160,7 +158,7 @@ model tbl_antrian_pasiens {
   status_pembayaran_id     BigInt?   @default(31) @db.UnsignedBigInt
   status_terima_sample_id  BigInt?   @default(32) @db.UnsignedBigInt
   sample_pengambil         String?   @db.VarChar(255)
-  sample_waktu             String?   @db.VarChar(255)
+  sample_waktu             DateTime?   @db.DateTime(0)
   sample_jenis             String?   @db.VarChar(255)
   sample_lokasi            String?   @db.VarChar(255)
   sample_kondisi           String?   @db.VarChar(255)
@@ -230,18 +228,34 @@ model tbl_user_customers {
 }
 
 model set_libraries {
-  id          BigInt   @id @default(autoincrement())
-  category_id BigInt
-  name        String   @db.VarChar(255)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id             BigInt         @id @default(autoincrement())
+  category_id    BigInt
+  name           String         @db.VarChar(255)
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
   set_categories set_categories @relation(fields: [category_id], references: [id])
+
+  @@index([category_id], map: "set_libraries_category_id_fkey")
 }
 
 model set_categories {
-  id         BigInt    @id @default(autoincrement())
+  id            BigInt          @id @default(autoincrement())
+  name          String          @db.VarChar(255)
+  created_at    DateTime?       @db.Timestamp(0)
+  updated_at    DateTime?       @db.Timestamp(0)
+  set_libraries set_libraries[]
+}
+
+model set_dokter_rujuks {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
   name       String    @db.VarChar(255)
   created_at DateTime? @db.Timestamp(0)
   updated_at DateTime? @db.Timestamp(0)
-  set_libraries set_libraries[]
+}
+
+model set_instansi_rujuks {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name       String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
 }

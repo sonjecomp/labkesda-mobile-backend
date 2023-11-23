@@ -16,9 +16,8 @@ export class CreateAntrianPasienDto {
   @ApiProperty()
   sample_pengambil: string;
 
-  //   ini gatau
   @ApiProperty()
-  tanggalPengambilanSampel: Date;
+  sample_waktu: Date;
 
   @ApiProperty()
   sample_kondisi: string;

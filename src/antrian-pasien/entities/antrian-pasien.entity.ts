@@ -21,7 +21,7 @@ export class AntrianPasien implements tbl_antrian_pasiens {
   status_pembayaran_id: bigint;
   status_terima_sample_id: bigint;
   sample_pengambil: string;
-  sample_waktu: string;
+  sample_waktu: Date;
   sample_jenis: string;
   sample_lokasi: string;
   sample_kondisi: string;

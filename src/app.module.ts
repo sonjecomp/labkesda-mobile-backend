@@ -11,6 +11,8 @@ import { UserPasienModule } from './user-pasien/user-pasien.module';
 import { PrismaService } from './prisma/prisma.service';
 import { AntrianPasienModule } from './antrian-pasien/antrian-pasien.module';
 import { CategoryModule } from './category/category.module';
+import { DokterModule } from './dokter/dokter.module';
+import { InstansiModule } from './instansi/instansi.module';
 
 @Module({
   imports: [
@@ -33,6 +35,14 @@ import { CategoryModule } from './category/category.module';
           {
             path: 'category',
             module: CategoryModule,
+          },
+          {
+            path: 'dokter',
+            module: DokterModule,
+          },
+          {
+            path: 'instansi',
+            module: InstansiModule,
           },
           {
             path: 'geo',
@@ -66,6 +76,8 @@ import { CategoryModule } from './category/category.module';
     UserPasienModule,
     AntrianPasienModule,
     CategoryModule,
+    DokterModule,
+    InstansiModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
