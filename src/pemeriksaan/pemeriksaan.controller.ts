@@ -9,6 +9,16 @@ import { CreatePemeriksaanPasienLamaDto } from './dto/create-pemeriksaan-pasien-
 export class PemeriksaanController {
   constructor(private readonly pemeriksaanService: PemeriksaanService) {}
 
+  @Get()
+  findAll() {
+    return this.pemeriksaanService.findAll();
+  }
+
+  @Get('user')
+  findAllUser() {
+    return this.pemeriksaanService.findAllUser();
+  }
+
   @Post('create-pemeriksaan-pasien-baru')
   createPasienBaru(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
     return this.pemeriksaanService.createPasienBaru(createPemeriksaanDto);
@@ -23,18 +33,27 @@ export class PemeriksaanController {
     );
   }
 
-  // @Post('create-pemeriksaan-instansi-baru')
-  // createInstansiBaru(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
-  //   return this.pemeriksaanService.create(createPemeriksaanDto);
-  // }
+  @Post('create-pemeriksaan-instansi-baru')
+  createInstansiBaru(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
+    return this.pemeriksaanService.createPasienBaru(createPemeriksaanDto);
+  }
 
-  // @Post('create-pemeriksaan-instansi-lama')
-  // createInstansiLama(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
-  //   return this.pemeriksaanService.create(createPemeriksaanDto);
-  // }
+  @Post('create-pemeriksaan-instansi-lama')
+  createInstansiLama(
+    @Body() createPemeriksaanPasienLama: CreatePemeriksaanPasienLamaDto,
+  ) {
+    return this.pemeriksaanService.createPasienLama(
+      createPemeriksaanPasienLama,
+    );
+  }
 
   @Get('riwayat-pemeriksaan/:kodePendaftaran')
   getLatestKodePendaftaran(@Param('kodePendaftaran') kodePendaftaran: string) {
     return this.pemeriksaanService.getRiwayatPemeriksaan(kodePendaftaran);
+  }
+
+  @Get('hasil-pemeriksaan/:kodePemeriksaan')
+  getHasilPemeriksaan(@Param('kodePemeriksaan') kodePemeriksaan: string) {
+    return this.pemeriksaanService.getHasilPemeriksaan(kodePemeriksaan);
   }
 }

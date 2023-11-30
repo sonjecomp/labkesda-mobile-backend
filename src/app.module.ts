@@ -13,6 +13,8 @@ import { AntrianPasienModule } from './antrian-pasien/antrian-pasien.module';
 import { CategoryModule } from './category/category.module';
 import { DokterModule } from './dokter/dokter.module';
 import { InstansiModule } from './instansi/instansi.module';
+import { PromoModule } from './promo/promo.module';
+import { LayananModule } from './layanan/layanan.module';
 
 @Module({
   imports: [
@@ -23,14 +25,6 @@ import { InstansiModule } from './instansi/instansi.module';
           {
             path: 'pemeriksaan',
             module: PemeriksaanModule,
-          },
-          {
-            path: 'user-pasien',
-            module: UserPasienModule,
-          },
-          {
-            path: 'antrian-pasien',
-            module: AntrianPasienModule,
           },
           {
             path: 'category',
@@ -65,6 +59,14 @@ import { InstansiModule } from './instansi/instansi.module';
               },
             ],
           },
+          {
+            path: 'promo',
+            module: PromoModule,
+          },
+          {
+            path: 'layanan',
+            module: LayananModule,
+          },
         ],
       },
     ]),
@@ -78,6 +80,8 @@ import { InstansiModule } from './instansi/instansi.module';
     CategoryModule,
     DokterModule,
     InstansiModule,
+    PromoModule,
+    LayananModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

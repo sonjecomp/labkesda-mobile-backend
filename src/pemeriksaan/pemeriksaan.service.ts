@@ -13,6 +13,34 @@ export class PemeriksaanService {
     readonly antriannPasienService: AntrianPasienService,
   ) {}
 
+  async findAll() {
+    try {
+      const result = await this.prisma.tbl_antrian_pasiens.findMany();
+
+      if (!result || result.length === 0) {
+        throw new NotFoundException();
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAllUser() {
+    try {
+      const result = await this.prisma.tbl_user_customers.findMany();
+
+      if (!result || result.length === 0) {
+        throw new NotFoundException();
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createPasienBaru(createPemeriksaanDto: CreatePemeriksaanDto) {
     try {
       // create user
@@ -63,8 +91,30 @@ export class PemeriksaanService {
           foundUser.id,
         );
 
-      // TODO: lanjut bikin pemeriksaan pasien lama
-      return foundPemeriksaan;
+      if (!foundPemeriksaan) {
+        throw new Error('Terjadi kesalahan');
+      }
+
+      // const data: CreateAntrianPasienDto = {
+      //   dokter_id: foundPemeriksaan.dokter_id,
+      //   instansi_id: foundPemeriksaan.instansi_id,
+      //   sample_jenis: foundPemeriksaan.sample_jenis,
+      //   sample_kondisi: foundPemeriksaan.sample_kondisi,
+      //   sample_lokasi: foundPemeriksaan.sample_lokasi,
+      //   sample_pengambil: foundPemeriksaan.sample_pengambil,
+      //   sample_wadah: foundPemeriksaan.sample_wadah,
+      // }
+
+      const result = await this.antriannPasienService.createAntrianPasien(
+        foundPemeriksaan,
+        foundUser.id,
+      );
+
+      if (!result) {
+        throw new Error('Terjadi kesalahan');
+      }
+
+      return result;
     } catch (error) {
       throw error;
     }
@@ -87,6 +137,33 @@ export class PemeriksaanService {
       );
 
       return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getHasilPemeriksaan(kodePendaftaran: string) {
+    try {
+      const foundUser = await this.prisma.tbl_user_customers.findFirst({
+        where: {
+          kode_pendaftaran: kodePendaftaran,
+        },
+      });
+
+      if (!foundUser || !foundUser.id) {
+        throw new NotFoundException('Kode pendaftaran tidak ditemukan');
+      }
+
+      const foundPemeriksaan =
+        await this.antriannPasienService.getAntrianPasienByKodePemeriksaan(
+          foundUser.id,
+        );
+
+      if (!foundPemeriksaan) {
+        throw new Error('Terjadi kesalahan');
+      }
+
+      return foundPemeriksaan;
     } catch (error) {
       throw error;
     }
