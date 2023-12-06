@@ -1,16 +1,18 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { PromoService } from './promo.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { CreatePromoDto } from './dto/create-promo.dto';
 
 @ApiTags('promo')
 @Controller()
 export class PromoController {
   constructor(private readonly promoService: PromoService) {}
 
-  // @Post()
-  // create(@Body() createPromoDto: CreatePromoDto) {
-  //   return this.promoService.create(createPromoDto);
-  // }
+  @ApiExcludeEndpoint()
+  @Post()
+  create(@Body() createPromoDto: CreatePromoDto) {
+    return this.promoService.create(createPromoDto);
+  }
 
   @Get()
   findAll() {

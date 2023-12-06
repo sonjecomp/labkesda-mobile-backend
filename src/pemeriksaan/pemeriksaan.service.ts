@@ -44,6 +44,11 @@ export class PemeriksaanService {
   async createPasienBaru(createPemeriksaanDto: CreatePemeriksaanDto) {
     try {
       // create user
+
+      // console.log(createPemeriksaanDto);
+
+      // throw new Error('Terjadi kesalahan');
+
       const user = await this.userPasienService.createPasienBaru(
         createPemeriksaanDto.user,
       );

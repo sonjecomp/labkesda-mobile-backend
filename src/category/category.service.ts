@@ -52,4 +52,25 @@ export class CategoryService {
       throw error;
     }
   }
+
+  async getPekerjaanById(id: string): Promise<string> {
+    try {
+      const result = await this.prisma.set_libraries.findUnique({
+        where: {
+          id: BigInt(parseInt(id)),
+        },
+        select: {
+          name: true,
+        },
+      });
+
+      if (!result || !result.name) {
+        throw new NotFoundException(`Pekerjaan with id ${id} not found`);
+      }
+
+      return result.name;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

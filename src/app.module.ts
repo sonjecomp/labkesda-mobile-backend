@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { PemeriksaanModule } from './pemeriksaan/pemeriksaan.module';
 import { RouterModule } from '@nestjs/core';
 import { ProvinsiModule } from './geo/provinsi/provinsi.module';
@@ -83,7 +81,6 @@ import { LayananModule } from './layanan/layanan.module';
     PromoModule,
     LayananModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [PrismaService],
 })
 export class AppModule {}

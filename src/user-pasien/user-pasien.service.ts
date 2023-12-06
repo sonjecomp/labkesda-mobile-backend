@@ -1,16 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserPasienDto } from './dto/create-user-pasien.dto';
 import { PrismaClient } from '@prisma/client';
+import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class UserPasienService {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(
+    private readonly prisma: PrismaClient,
+    readonly categoryService: CategoryService,
+  ) {}
 
   async createPasienBaru(createUserPasienDto: CreateUserPasienDto) {
     try {
+      const pekerjaanName = await this.categoryService.getPekerjaanById(
+        createUserPasienDto.pekerjaan,
+      );
+
       const result = await this.prisma.tbl_user_customers.create({
         data: {
           ...createUserPasienDto,
+          pekerjaan: pekerjaanName,
           kode_pendaftaran: await this.generateKodePendaftaran(),
           name_instansi: '',
           is_instansi: false,

@@ -1,26 +1,52 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePromoDto } from './dto/create-promo.dto';
-import { UpdatePromoDto } from './dto/update-promo.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Promo } from './entities/promo.entity';
 
 @Injectable()
 export class PromoService {
-  create(createPromoDto: CreatePromoDto) {
-    return 'This action adds a new promo';
+  constructor(readonly prisma: PrismaService) {}
+
+  async create(createPromoDto: any): Promise<Promo> {
+    try {
+      return await this.prisma.tbl_events.create({
+        data: {
+          ...createPromoDto,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findAll() {
-    return `This action returns all promo`;
+  async findAll(): Promise<Promo[]> {
+    try {
+      const result = await this.prisma.tbl_events.findMany();
+
+      if (!result || result.length === 0) {
+        throw new NotFoundException();
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} promo`;
-  }
+  async findOne(id: number): Promise<Promo> {
+    try {
+      const result = await this.prisma.tbl_events.findUnique({
+        where: {
+          id: id,
+        },
+      });
 
-  update(id: number, updatePromoDto: UpdatePromoDto) {
-    return `This action updates a #${id} promo`;
-  }
+      if (!result) {
+        throw new NotFoundException();
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} promo`;
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 }
