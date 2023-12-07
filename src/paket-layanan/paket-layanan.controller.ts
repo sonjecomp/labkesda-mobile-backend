@@ -1,6 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PaketLayananService } from './paket-layanan.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('paket-layanan')
 @Controller()
@@ -8,8 +8,9 @@ export class PaketLayananController {
   constructor(private readonly paketLayananService: PaketLayananService) {}
 
   @Get()
-  findAll() {
-    return this.paketLayananService.findAll();
+  @ApiQuery({ name: 'page', required: false })
+  findAll(@Query('page') page: string) {
+    return this.paketLayananService.findAll(+page);
   }
 
   @Get(':id')

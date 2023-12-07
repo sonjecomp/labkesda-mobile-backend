@@ -2,19 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class LayananService {
-  constructor(private readonly prisma: PrismaService) {}
+export class JenisLayananService {
+  constructor(private prisma: PrismaService) {}
 
-  async findAll(page: number): Promise<any> {
+  async findAll() {
     try {
-      const result = await this.prisma.set_tindakans.findMany({
-        take: 10,
-        skip: page ? (page - 1) * 10 : 0,
+      const result = await this.prisma.set_jenis_tindakans.findMany({
         select: {
           id: true,
           name: true,
-          harga: true,
-          jenis_tindakan_id: true,
         },
       });
 
@@ -30,15 +26,13 @@ export class LayananService {
 
   async findOne(id: number) {
     try {
-      const result = await this.prisma.set_tindakans.findUnique({
+      const result = await this.prisma.set_jenis_tindakans.findUnique({
         where: {
           id: id,
         },
         select: {
           id: true,
           name: true,
-          harga: true,
-          jenis_tindakan_id: true,
         },
       });
 
