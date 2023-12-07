@@ -18,6 +18,29 @@ export class AntrianPasienService {
           pasien_id: pasien_id,
           tipe_pasien_id: 1,
         },
+        select: {
+          no_antrian: true,
+          waktu_kunjungan: true,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createAntrianPasienLama(waktu_kunjungan: Date, pasien_id: bigint) {
+    try {
+      return await this.prisma.tbl_antrian_pasiens.create({
+        data: {
+          waktu_kunjungan,
+          no_antrian: await this.generateNoAntrian(),
+          pasien_id: pasien_id,
+          tipe_pasien_id: 1,
+        },
+        select: {
+          no_antrian: true,
+          waktu_kunjungan: true,
+        },
       });
     } catch (error) {
       throw error;

@@ -24,6 +24,17 @@ export class UserPasienService {
           name_instansi: '',
           is_instansi: false,
         },
+        select: {
+          id: true,
+          kode_pendaftaran: true,
+          name: true,
+          tanggal_lahir: true,
+          noHP: true,
+          email: true,
+          alamat_domisili: true,
+          status_verif_email: true,
+          status_verif_noPhone: true,
+        },
       });
 
       if (!result) {

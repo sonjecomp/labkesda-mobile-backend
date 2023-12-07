@@ -43,12 +43,6 @@ export class PemeriksaanService {
 
   async createPasienBaru(createPemeriksaanDto: CreatePemeriksaanDto) {
     try {
-      // create user
-
-      // console.log(createPemeriksaanDto);
-
-      // throw new Error('Terjadi kesalahan');
-
       const user = await this.userPasienService.createPasienBaru(
         createPemeriksaanDto.user,
       );
@@ -91,31 +85,12 @@ export class PemeriksaanService {
         throw new NotFoundException('Kode pendaftaran tidak ditemukan');
       }
 
-      const foundPemeriksaan =
-        await this.antriannPasienService.getAntrianPasienByKodePemeriksaan(
-          foundUser.id,
-        );
-
-      if (!foundPemeriksaan) {
-        throw new Error('Terjadi kesalahan');
-      }
-
-      // const data: CreateAntrianPasienDto = {
-      //   dokter_id: foundPemeriksaan.dokter_id,
-      //   instansi_id: foundPemeriksaan.instansi_id,
-      //   sample_jenis: foundPemeriksaan.sample_jenis,
-      //   sample_kondisi: foundPemeriksaan.sample_kondisi,
-      //   sample_lokasi: foundPemeriksaan.sample_lokasi,
-      //   sample_pengambil: foundPemeriksaan.sample_pengambil,
-      //   sample_wadah: foundPemeriksaan.sample_wadah,
-      // }
-
-      const result = await this.antriannPasienService.createAntrianPasien(
-        foundPemeriksaan,
+      const result = await this.antriannPasienService.createAntrianPasienLama(
+        createPemeriksaanPasienLamaDto.tanggal_kunjungan,
         foundUser.id,
       );
 
-      if (!result) {
+      if (!result || !result.no_antrian) {
         throw new Error('Terjadi kesalahan');
       }
 
@@ -156,7 +131,7 @@ export class PemeriksaanService {
       });
 
       if (!foundUser || !foundUser.id) {
-        throw new NotFoundException('Kode pendaftaran tidak ditemukan');
+        throw new NotFoundException('Kode pemeriksaan tidak ditemukan');
       }
 
       const foundPemeriksaan =

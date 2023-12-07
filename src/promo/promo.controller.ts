@@ -23,14 +23,4 @@ export class PromoController {
   findOne(@Param('id') id: string) {
     return this.promoService.findOne(+id);
   }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePromoDto: UpdatePromoDto) {
-  //   return this.promoService.update(+id, updatePromoDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.promoService.remove(+id);
-  // }
 }

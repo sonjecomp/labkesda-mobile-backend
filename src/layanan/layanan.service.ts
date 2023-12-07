@@ -1,26 +1,25 @@
-import { Injectable } from '@nestjs/common';
-import { CreateLayananDto } from './dto/create-layanan.dto';
-import { UpdateLayananDto } from './dto/update-layanan.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class LayananService {
-  create(createLayananDto: CreateLayananDto) {
-    return 'This action adds a new layanan';
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all layanan`;
+  async findAll(): Promise<any> {
+    try {
+      const result = await this.prisma.set_tindakans.findMany();
+
+      if (!result || result.length === 0) {
+        throw new NotFoundException();
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
   findOne(id: number) {
     return `This action returns a #${id} layanan`;
-  }
-
-  update(id: number, updateLayananDto: UpdateLayananDto) {
-    return `This action updates a #${id} layanan`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} layanan`;
   }
 }

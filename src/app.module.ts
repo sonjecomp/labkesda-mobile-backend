@@ -13,6 +13,7 @@ import { DokterModule } from './dokter/dokter.module';
 import { InstansiModule } from './instansi/instansi.module';
 import { PromoModule } from './promo/promo.module';
 import { LayananModule } from './layanan/layanan.module';
+import { PaketLayananModule } from './paket-layanan/paket-layanan.module';
 
 @Module({
   imports: [
@@ -65,6 +66,10 @@ import { LayananModule } from './layanan/layanan.module';
             path: 'layanan',
             module: LayananModule,
           },
+          {
+            path: 'paket-layanan',
+            module: PaketLayananModule,
+          },
         ],
       },
     ]),
@@ -80,6 +85,7 @@ import { LayananModule } from './layanan/layanan.module';
     InstansiModule,
     PromoModule,
     LayananModule,
+    PaketLayananModule,
   ],
   providers: [PrismaService],
 })
