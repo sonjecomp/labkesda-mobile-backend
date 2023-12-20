@@ -30,7 +30,7 @@ export class AntrianPasienService {
 
   async createAntrianPasienLama(waktu_kunjungan: Date, pasien_id: bigint) {
     try {
-      return await this.prisma.tbl_antrian_pasiens.create({
+      const result = await this.prisma.tbl_antrian_pasiens.create({
         data: {
           waktu_kunjungan,
           no_antrian: await this.generateNoAntrian(),
@@ -42,6 +42,14 @@ export class AntrianPasienService {
           waktu_kunjungan: true,
         },
       });
+
+      if (!result) {
+        throw new Error('Terjadi kesalahan');
+      }
+
+      console.log(result);
+
+      return result;
     } catch (error) {
       throw error;
     }

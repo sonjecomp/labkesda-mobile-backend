@@ -3,6 +3,7 @@ import { PemeriksaanService } from './pemeriksaan.service';
 import { CreatePemeriksaanDto } from './dto/create-pemeriksaan.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CreatePemeriksaanPasienLamaDto } from './dto/create-pemeriksaan-pasien-lama.dto';
+import { CreatePemeriksaanInstansiBaruDto } from './dto/create-pemeriksaan-instansi-baru.dto';
 
 @ApiTags('pemeriksaan')
 @Controller()
@@ -34,8 +35,12 @@ export class PemeriksaanController {
   }
 
   @Post('create-pemeriksaan-instansi-baru')
-  createInstansiBaru(@Body() createPemeriksaanDto: CreatePemeriksaanDto) {
-    return this.pemeriksaanService.createPasienBaru(createPemeriksaanDto);
+  createInstansiBaru(
+    @Body() createPemeriksaanDto: CreatePemeriksaanInstansiBaruDto,
+  ) {
+    return this.pemeriksaanService.createPemeriksaanInstansiBaru(
+      createPemeriksaanDto,
+    );
   }
 
   @Post('create-pemeriksaan-instansi-lama')

@@ -9,7 +9,7 @@ export class ProvinsiService {
 
   async create(createProvinsiDto: CreateProvinsiDto): Promise<Provinsi> {
     try {
-      const result = await this.prisma.set_provinsi.create({
+      const result = await this.prisma.set_provinsis.create({
         data: createProvinsiDto,
       });
 
@@ -21,7 +21,7 @@ export class ProvinsiService {
 
   async findAll(): Promise<Provinsi[]> {
     try {
-      const result = (await this.prisma.set_provinsi.findMany({
+      const result = (await this.prisma.set_provinsis.findMany({
         select: {
           id: true,
           name: true,
@@ -36,7 +36,7 @@ export class ProvinsiService {
 
   async findOne(id: number): Promise<Provinsi> {
     try {
-      const result = await this.prisma.set_provinsi.findUnique({
+      const result = await this.prisma.set_provinsis.findUnique({
         where: {
           id: BigInt(id),
         },

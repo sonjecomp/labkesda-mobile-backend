@@ -35,7 +35,7 @@ export class CreateUserPasienDto {
   pekerjaan: string;
 
   @ApiProperty()
-  provinsi_id: bigint;
+  provinsi_id: number;
 
   @ApiProperty()
   kotaKabupaten_id: bigint;

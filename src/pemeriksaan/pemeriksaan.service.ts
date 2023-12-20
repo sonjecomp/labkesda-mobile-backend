@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UserPasienService } from 'src/user-pasien/user-pasien.service';
 import { AntrianPasienService } from 'src/antrian-pasien/antrian-pasien.service';
 import { CreatePemeriksaanPasienLamaDto } from './dto/create-pemeriksaan-pasien-lama.dto';
+import { CreatePemeriksaanInstansiBaruDto } from './dto/create-pemeriksaan-instansi-baru.dto';
 
 @Injectable()
 export class PemeriksaanService {
@@ -42,6 +43,7 @@ export class PemeriksaanService {
   }
 
   async createPasienBaru(createPemeriksaanDto: CreatePemeriksaanDto) {
+    console.log(createPemeriksaanDto);
     try {
       const user = await this.userPasienService.createPasienBaru(
         createPemeriksaanDto.user,
@@ -70,6 +72,33 @@ export class PemeriksaanService {
     }
   }
 
+  async createPemeriksaanInstansiBaru(data: CreatePemeriksaanInstansiBaruDto) {
+    try {
+      const user = await this.userPasienService.createInstansiBaru(data.user);
+
+      if (!user) {
+        throw new Error('Terjadi kesalahan');
+      }
+
+      // create pemeriksaan
+      const pemeriksaan = await this.antriannPasienService.createAntrianPasien(
+        data.pemeriksaan,
+        user.id,
+      );
+
+      if (!pemeriksaan) {
+        throw new Error('Terjadi kesalahan');
+      }
+
+      return {
+        user,
+        pemeriksaan,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createPasienLama(
     createPemeriksaanPasienLamaDto: CreatePemeriksaanPasienLamaDto,
   ) {
@@ -77,7 +106,25 @@ export class PemeriksaanService {
       // create pemeriksaan
       const foundUser = await this.prisma.tbl_user_customers.findFirst({
         where: {
-          kode_pendaftaran: createPemeriksaanPasienLamaDto.kode_pendaftaran,
+          OR: [
+            {
+              kode_pendaftaran: createPemeriksaanPasienLamaDto.kode_pendaftaran,
+            },
+            {
+              nik: createPemeriksaanPasienLamaDto.kode_pendaftaran,
+            },
+          ],
+        },
+        select: {
+          id: true,
+          kode_pendaftaran: true,
+          name: true,
+          tanggal_lahir: true,
+          noHP: true,
+          email: true,
+          alamat_domisili: true,
+          status_verif_email: true,
+          status_verif_noPhone: true,
         },
       });
 
@@ -94,7 +141,10 @@ export class PemeriksaanService {
         throw new Error('Terjadi kesalahan');
       }
 
-      return result;
+      return {
+        user: foundUser,
+        pemeriksaan: result,
+      };
     } catch (error) {
       throw error;
     }

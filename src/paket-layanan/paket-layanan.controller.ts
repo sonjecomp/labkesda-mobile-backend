@@ -9,7 +9,7 @@ export class PaketLayananController {
 
   @Get()
   @ApiQuery({ name: 'page', required: false })
-  findAll(@Query('page') page: string) {
+  async findAll(@Query('page') page: string) {
     return this.paketLayananService.findAll(+page);
   }
 

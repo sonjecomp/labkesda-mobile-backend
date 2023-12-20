@@ -1,6 +1,6 @@
-import { set_kelurahan } from '@prisma/client';
+import { set_kelurahans } from '@prisma/client';
 
-export class Kelurahan implements set_kelurahan {
+export class Kelurahan implements set_kelurahans {
   id: bigint;
   kecamatan_id: bigint;
   name: string;

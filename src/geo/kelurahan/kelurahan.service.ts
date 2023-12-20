@@ -9,7 +9,7 @@ export class KelurahanService {
 
   async create(createKelurahanDto: CreateKelurahanDto): Promise<Kelurahan> {
     try {
-      return this.prisma.set_kelurahan.create({
+      return this.prisma.set_kelurahans.create({
         data: createKelurahanDto,
       });
     } catch (error) {
@@ -23,7 +23,7 @@ export class KelurahanService {
         throw new NotFoundException('Kecamatan id tidak boleh kosong');
       }
 
-      const result = (await this.prisma.set_kelurahan.findMany({
+      const result = (await this.prisma.set_kelurahans.findMany({
         where: {
           kecamatan_id: BigInt(id),
         },

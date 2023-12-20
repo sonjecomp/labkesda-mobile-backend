@@ -1,6 +1,6 @@
-import { set_provinsi } from '@prisma/client';
+import { set_provinsis } from '@prisma/client';
 
-export class Provinsi implements set_provinsi {
+export class Provinsi implements set_provinsis {
   id: bigint;
   name: string;
   created_at: Date;

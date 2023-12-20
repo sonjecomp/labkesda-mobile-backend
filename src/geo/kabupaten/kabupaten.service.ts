@@ -9,7 +9,7 @@ export class KabupatenService {
 
   async create(createKabupatenDto: CreateKabupatenDto): Promise<Kabupaten> {
     try {
-      const result = await this.prisma.set_kota.create({
+      const result = await this.prisma.set_kota_kabupatens.create({
         data: createKabupatenDto,
       });
 
@@ -25,7 +25,7 @@ export class KabupatenService {
         throw new NotFoundException('Provinsi id tidak boleh kosong');
       }
 
-      const result = (await this.prisma.set_kota.findMany({
+      const result = (await this.prisma.set_kota_kabupatens.findMany({
         where: {
           provinsi_id: BigInt(id),
         },
@@ -50,7 +50,7 @@ export class KabupatenService {
 
   async findOne(id: number): Promise<Kabupaten> {
     try {
-      const result = await this.prisma.set_kota.findUnique({
+      const result = await this.prisma.set_kota_kabupatens.findUnique({
         where: {
           id: BigInt(id),
         },

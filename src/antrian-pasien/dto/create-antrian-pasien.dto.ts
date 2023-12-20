@@ -31,4 +31,10 @@ export class CreateAntrianPasienDto {
 
   @ApiProperty()
   waktu_kunjungan: Date;
+
+  @ApiProperty()
+  tipe_pendaftaran_id: number;
+
+  @ApiProperty()
+  jenis_pasien_id: number;
 }

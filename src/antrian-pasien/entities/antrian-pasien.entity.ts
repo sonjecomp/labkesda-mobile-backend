@@ -6,10 +6,12 @@ export class AntrianPasien implements tbl_antrian_pasiens {
   kode_pemeriksaan: string;
   pasien_id: bigint;
   tipe_pasien_id: bigint;
+  jenis_pasien_id: number;
+  tipe_pendaftaran_id: number;
   rujukan_rs_id: bigint;
   instansi_id: bigint;
   dokter_id: bigint;
-  umur: number;
+  umur: string;
   waktu_kunjungan: Date;
   status_pendaftaran_id: bigint;
   lab_validator_id: bigint;
@@ -20,8 +22,10 @@ export class AntrianPasien implements tbl_antrian_pasiens {
   pembayaran_id: bigint;
   status_pembayaran_id: bigint;
   status_terima_sample_id: bigint;
+  tipe_sample_id: number;
   sample_pengambil: string;
   sample_waktu: Date;
+  sample_waktu_terima_loket: Date;
   sample_jenis: string;
   sample_lokasi: string;
   sample_kondisi: string;
@@ -38,7 +42,11 @@ export class AntrianPasien implements tbl_antrian_pasiens {
   waktu_validasi: Date;
   user_validasi: bigint;
   catatan_validasi: string;
+  count_print: number;
   turn_around_time: string;
+  no_sertifikat: string;
+  no_form_bawah: string;
+  revisi_hasil: string;
   deleted_at: Date;
   created_at: Date;
   updated_at: Date;

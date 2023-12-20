@@ -1,6 +1,6 @@
-import { set_kota } from '@prisma/client';
+import { set_kota_kabupatens } from '@prisma/client';
 
-export class Kabupaten implements set_kota {
+export class Kabupaten implements set_kota_kabupatens {
   id: bigint;
   provinsi_id: bigint;
   name: string;
