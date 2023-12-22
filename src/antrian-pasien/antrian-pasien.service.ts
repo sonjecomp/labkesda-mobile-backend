@@ -9,6 +9,7 @@ export class AntrianPasienService {
   async createAntrianPasien(
     createAntrianPasienDto: CreateAntrianPasienDto,
     pasien_id: bigint,
+    isMou: boolean = false,
   ) {
     try {
       return await this.prisma.tbl_antrian_pasiens.create({
@@ -16,7 +17,7 @@ export class AntrianPasienService {
           ...createAntrianPasienDto,
           no_antrian: await this.generateNoAntrian(),
           pasien_id: pasien_id,
-          tipe_pasien_id: 1,
+          tipe_pasien_id: isMou ? 2 : 1,
         },
         select: {
           no_antrian: true,
@@ -55,16 +56,26 @@ export class AntrianPasienService {
     }
   }
 
-  async getAntrianPasienByKodePemeriksaan(userId: bigint) {
+  async getAntrianPasienByKodePemeriksaan(kodePemeriksaan: bigint) {
     try {
       const result = await this.prisma.tbl_antrian_pasiens.findFirst({
         where: {
-          pasien_id: userId,
+          kode_pemeriksaan: kodePemeriksaan.toString(),
+        },
+        select: {
+          id: true,
+          kode_pemeriksaan: true,
+          status_pembayaran_id: true,
+          status_pemeriksaan_id: true,
+          waktu_kunjungan: true,
+          tipe_pasien_id: true,
+          sample_jenis: true,
+          pasien_id: true,
         },
       });
 
       if (!result) {
-        throw new NotFoundException();
+        throw new NotFoundException('Kode pemeriksaan tidak ditemukan');
       }
 
       return result;
@@ -78,6 +89,15 @@ export class AntrianPasienService {
       const result = await this.prisma.tbl_antrian_pasiens.findMany({
         where: {
           pasien_id: userId,
+        },
+        select: {
+          id: true,
+          kode_pemeriksaan: true,
+          status_pembayaran_id: true,
+          status_pemeriksaan_id: true,
+          waktu_kunjungan: true,
+          tipe_pasien_id: true,
+          sample_jenis: true,
         },
       });
 

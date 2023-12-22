@@ -43,7 +43,6 @@ export class PemeriksaanService {
   }
 
   async createPasienBaru(createPemeriksaanDto: CreatePemeriksaanDto) {
-    console.log(createPemeriksaanDto);
     try {
       const user = await this.userPasienService.createPasienBaru(
         createPemeriksaanDto.user,
@@ -108,10 +107,11 @@ export class PemeriksaanService {
         where: {
           OR: [
             {
-              kode_pendaftaran: createPemeriksaanPasienLamaDto.kode_pendaftaran,
+              kode_pendaftaran:
+                createPemeriksaanPasienLamaDto.user.kodePendaftaran,
             },
             {
-              nik: createPemeriksaanPasienLamaDto.kode_pendaftaran,
+              nik: createPemeriksaanPasienLamaDto.user.kodePendaftaran,
             },
           ],
         },
@@ -129,11 +129,13 @@ export class PemeriksaanService {
       });
 
       if (!foundUser || !foundUser.id) {
-        throw new NotFoundException('Kode pendaftaran tidak ditemukan');
+        throw new NotFoundException(
+          'Kode pendaftaran atau NIK tidak ditemukan',
+        );
       }
 
-      const result = await this.antriannPasienService.createAntrianPasienLama(
-        createPemeriksaanPasienLamaDto.tanggal_kunjungan,
+      const result = await this.antriannPasienService.createAntrianPasien(
+        createPemeriksaanPasienLamaDto.pemeriksaan,
         foundUser.id,
       );
 
@@ -150,50 +152,95 @@ export class PemeriksaanService {
     }
   }
 
-  async getRiwayatPemeriksaan(kodePendaftaran: string) {
+  async checkNikOrKodePendaftaran(kodePendaftaran: string) {
     try {
       const foundUser = await this.prisma.tbl_user_customers.findFirst({
         where: {
-          kode_pendaftaran: kodePendaftaran,
+          OR: [
+            {
+              kode_pendaftaran: kodePendaftaran,
+            },
+            {
+              nik: kodePendaftaran,
+            },
+          ],
+        },
+        select: {
+          id: true,
+          kode_pendaftaran: true,
+          name: true,
+          tanggal_lahir: true,
+          noHP: true,
+          email: true,
+          alamat_domisili: true,
+          status_verif_email: true,
+          status_verif_noPhone: true,
+          nik: true,
+          jenis_kelamin_id: true,
         },
       });
 
       if (!foundUser || !foundUser.id) {
-        throw new NotFoundException('Kode pendaftaran tidak ditemukan');
+        throw new NotFoundException(
+          'Kode pendaftaran atau NIK tidak ditemukan',
+        );
       }
 
-      const result = this.antriannPasienService.getPemeriksaanByUserId(
-        foundUser.id,
-      );
-
-      return result;
+      return foundUser;
     } catch (error) {
       throw error;
     }
   }
 
-  async getHasilPemeriksaan(kodePendaftaran: string) {
+  async getRiwayatPemeriksaan(kodePendaftaran: string) {
     try {
-      const foundUser = await this.prisma.tbl_user_customers.findFirst({
+      const foundUser = await this.checkNikOrKodePendaftaran(kodePendaftaran);
+
+      const result = await this.antriannPasienService.getPemeriksaanByUserId(
+        foundUser.id,
+      );
+
+      return result.map((item) => {
+        return {
+          user: foundUser,
+          pemeriksaan: item,
+        };
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getHasilPemeriksaan(kodePemeriksaan: string) {
+    try {
+      const foundPemeriksaan =
+        await this.antriannPasienService.getAntrianPasienByKodePemeriksaan(
+          BigInt(kodePemeriksaan),
+        );
+
+      const user = await this.prisma.tbl_user_customers.findFirst({
         where: {
-          kode_pendaftaran: kodePendaftaran,
+          id: foundPemeriksaan.pasien_id,
+        },
+        select: {
+          id: true,
+          kode_pendaftaran: true,
+          name: true,
+          tanggal_lahir: true,
+          noHP: true,
+          email: true,
+          alamat_domisili: true,
+          status_verif_email: true,
+          status_verif_noPhone: true,
+          nik: true,
+          jenis_kelamin_id: true,
         },
       });
 
-      if (!foundUser || !foundUser.id) {
-        throw new NotFoundException('Kode pemeriksaan tidak ditemukan');
-      }
-
-      const foundPemeriksaan =
-        await this.antriannPasienService.getAntrianPasienByKodePemeriksaan(
-          foundUser.id,
-        );
-
-      if (!foundPemeriksaan) {
-        throw new Error('Terjadi kesalahan');
-      }
-
-      return foundPemeriksaan;
+      return {
+        user,
+        pemeriksaan: foundPemeriksaan,
+      };
     } catch (error) {
       throw error;
     }

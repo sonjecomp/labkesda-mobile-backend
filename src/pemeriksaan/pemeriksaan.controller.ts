@@ -61,4 +61,9 @@ export class PemeriksaanController {
   getHasilPemeriksaan(@Param('kodePemeriksaan') kodePemeriksaan: string) {
     return this.pemeriksaanService.getHasilPemeriksaan(kodePemeriksaan);
   }
+
+  @Get('check-kode-pendaftaran/:kodePendaftaran')
+  checkKodePendaftaran(@Param('kodePendaftaran') kodePendaftaran: string) {
+    return this.pemeriksaanService.checkNikOrKodePendaftaran(kodePendaftaran);
+  }
 }

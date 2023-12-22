@@ -15,6 +15,7 @@ import { PromoModule } from './promo/promo.module';
 import { LayananModule } from './layanan/layanan.module';
 import { PaketLayananModule } from './paket-layanan/paket-layanan.module';
 import { JenisLayananModule } from './jenis-layanan/jenis-layanan.module';
+import { LibraryModule } from './library/library.module';
 
 @Module({
   imports: [
@@ -29,6 +30,10 @@ import { JenisLayananModule } from './jenis-layanan/jenis-layanan.module';
           {
             path: 'category',
             module: CategoryModule,
+          },
+          {
+            path: 'library',
+            module: LibraryModule,
           },
           {
             path: 'dokter',
@@ -86,6 +91,7 @@ import { JenisLayananModule } from './jenis-layanan/jenis-layanan.module';
     UserPasienModule,
     AntrianPasienModule,
     CategoryModule,
+    LibraryModule,
     DokterModule,
     InstansiModule,
     PromoModule,
