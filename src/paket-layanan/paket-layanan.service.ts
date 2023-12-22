@@ -43,6 +43,17 @@ export class PaketLayananService {
         }),
       );
 
+      results = await Promise.all(
+        results.map(async (result) => {
+          return {
+            ...result,
+            layanans: (await this.findLayananByPaketId(
+              Number(result.id),
+            )) as ILayanan[],
+          };
+        }),
+      );
+
       return results;
     } catch (error) {
       throw error;
